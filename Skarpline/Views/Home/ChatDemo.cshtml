@@ -1,0 +1,450 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Sample chat application</title>
+
+    <link type="text/css" rel="stylesheet" href="~/Css/ChatStyle.css" />
+    <link rel="stylesheet" href="~/Css/JQueryUI/themes/base/jquery.ui.all.css">
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/ui/jquery.ui.core.js"></script>
+    <script src="~/Scripts/ui/jquery.ui.widget.js"></script>
+    <script src="~/Scripts/ui/jquery.ui.mouse.js"></script>
+    <script src="~/Scripts/ui/jquery.ui.draggable.js"></script>
+    <script src="~/Scripts/ui/jquery.ui.resizable.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.0.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    <script type="text/javascript">
+
+        var typingText = '';
+        var typingTextPrivate = [];
+
+        $(function () {
+            
+            // Show chat room  or login screen
+            setScreen(false);
+
+            // Declare a proxy to reference the hub.
+            var chatHub = $.connection.chatHub;
+
+            chatHub.client.CountOnlineUser = function (count) {
+                alert(count);
+            };
+
+
+            registerClientMethods(chatHub);
+
+            // Start Hub
+            $.connection.hub.start().done(function () {
+
+                // register events for send butons
+                registerEvents(chatHub)
+
+            });
+
+        });
+
+        // Show login screen if user has not entered name.
+        function setScreen(isLogin) {
+
+            if (!isLogin) {
+                $("#divChat").hide();
+                $("#divLogin").show();
+            }
+            else {
+                $("#divChat").show();
+                $("#divLogin").hide();
+            }
+
+        }
+
+        function registerEvents(chatHub) {
+            
+            $("#btnStartChat").click(function () {
+
+
+                var name = $("#txtusername").val();
+
+                if (name.length > 0) {
+                    $(this).attr("disabled", true);
+                    $(this).val('Please wait...');
+                    chatHub.server.connect(name);
+                }
+                else {
+                    alert("Please enter your name");
+                }
+
+                $(this).removeAttr("disabled");
+                $(this).val('Start Chat');
+            });
+
+
+            $('#btnSendMsg').click(function () {
+
+                var msg = $("#txtMessage").val();
+
+                if (msg.length > 0) {
+
+                    var userName = $('#hdUserName').val();
+
+                    chatHub.server.sendMessageToAll(userName, msg);
+
+                    $("#txtMessage").val('');
+
+                    typingText = '';
+                }
+            });
+
+            // Login when user hits enter key after enring name
+            $("#txtusername").keypress(function (e) {
+                if (e.which == 13) {
+                    $("#btnStartChat").click();
+                }
+            });
+
+            // Send message to server when user hits enter key
+            $("#txtMessage").keyup(function (e) {
+
+                if (e.which == 13) {
+
+                    // clear typing text
+                    typingText = '';
+                    $('#btnSendMsg').click();
+
+                }
+                else {
+                    if (e.keyCode == 8)
+                        typingText = typingText.substring(0, typingText.length - 1);
+                    else
+                        typingText += String.fromCharCode(e.which);
+
+                    var encodedName = $('<div />').text($('#hdUserName').val()).html();
+
+                    chatHub.server.isTyping(encodedName, typingText);
+
+                }
+            });
+
+            $("#lnklogout").click(function (e) {
+
+                $.connection.hub.stop();
+
+                window.location = "/";
+            });
+
+        }
+
+
+        function registerClientMethods(chatHub) {
+
+            // when user successfully logged in
+            chatHub.client.onConnected = function (id, userName, allUsers, messages) {
+
+                setScreen(true);
+
+                $('#hdId').val(id);
+                $('#hdUserName').val(userName);
+                $('#spanUser').html(userName);
+
+                // Add All Users
+                for (i = 0; i < allUsers.length; i++) {
+
+                    AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].UserName);
+                }
+
+                // Add Existing Messages
+                for (i = 0; i < messages.length; i++) {
+
+                    AddMessage(messages[i].SenderId, messages[i].Msg);
+                }
+
+            }
+
+            // On New User Connected
+            chatHub.client.onNewUserConnected = function (id, name) {
+
+                AddUser(chatHub, id, name);
+            }
+
+
+            // On User Disconnected
+            chatHub.client.onUserDisconnected = function (id, userName) {
+
+                $('#' + id).remove();
+
+                $('#private_' + id).remove();
+
+                var disc = $('<div class="disconnect">"' + userName + '" logged off.</div>');
+
+                $(disc).hide();
+
+                $('#divusers').prepend(disc);
+
+                $(disc).fadeIn(200).delay(2000).fadeOut(200);
+
+            }
+
+            chatHub.client.messageReceived = function (userName, message) {
+
+                AddMessage(userName, message);
+            }
+
+
+            chatHub.client.sendPrivateMessage = function (windowId, fromUserName, message) {
+
+                var ctrId = 'private_' + windowId;
+                if ($('#' + ctrId).length == 0) {
+                    createPrivateChatWindow(chatHub, windowId, ctrId, fromUserName);
+
+                }
+
+                $('#' + ctrId).find('#divMessage').append('<div class="message"><span class="userName">' + fromUserName + '</span>: ' + message + '</div>');
+
+                // set scrollbar
+                var height = $('#' + ctrId).find('#divMessage')[0].scrollHeight;
+                $('#' + ctrId).find('#divMessage').scrollTop(height);
+
+            }
+
+            // Display typing for group window
+            chatHub.client.sayWhoIsTyping = function (name, message, userid) {
+
+                if (userid != $('#hdId').val()) {
+
+                    $('#isTyping').html('<em>' + name + ' is typing...' + message + '</em>');
+
+                    setTimeout(function () {
+                        $('#isTyping').html('&nbsp;');
+                    }, 5000);
+                }
+            };
+
+
+            // Display typing fopr private window
+            chatHub.client.sayWhoIsTypingPrivate = function (name, message, windowId) {
+
+                var ctrId = 'isTyping_private_' + windowId;
+
+                if ($('#' + ctrId).length > 0) {
+
+                    document.getElementById(ctrId).innerHTML = '<em>' + name + ' is typing...' + message + '</em>';
+
+                    setTimeout(function () {
+                        document.getElementById(ctrId).innerHTML = '&nbsp;';
+                    }, 5000);
+                }
+            };
+
+        }
+
+        // Display list of online users
+        function AddUser(chatHub, id, name) {
+
+            var userId = $('#hdId').val();
+
+            var code = "";
+
+            if (userId == id) {
+                $(".loginUser").append(name + "&nbsp;(You)");
+            }
+            else {
+
+                code = $('<a id="' + id + '" class="user" >' + name + '<a>');
+
+                $(code).dblclick(function () {
+
+                    var id = $(this).attr('id');
+
+                    if (userId != id)
+                        OpenPrivateChatWindow(chatHub, id, name);
+
+                });
+
+                $("#divusers").append(code);
+            }
+
+
+
+        }
+
+
+        function AddMessage(userName, message) {
+
+            $('#divChatWindow').append('<div class="message"><span class="userName">' + userName + '</span>: ' + message + '</div>');
+
+            var height = $('#divChatWindow')[0].scrollHeight;
+
+            $('#divChatWindow').scrollTop(height);
+        }
+
+
+        // Private window instead of chat room
+        function OpenPrivateChatWindow(chatHub, id, userName) {
+
+            var ctrId = 'private_' + id;
+
+            if ($('#' + ctrId).length > 0) return;
+
+            createPrivateChatWindow(chatHub, id, ctrId, userName);
+
+        }
+
+        // HTML to create private window
+        function createPrivateChatWindow(chatHub, userId, ctrId, userName) {
+
+            var div = '<div id="' + ctrId + '" class="ui-widget-content draggable" rel="0">' +
+                       '<div class="header">' +
+                          '<div  style="float:right;">' +
+                              '<img id="imgDelete"  style="cursor:pointer;" src="/Images/delete.png"/>' +
+                           '</div>' +
+
+                           '<span class="selText" rel="0">' + userName + '</span>' +
+                       '</div>' +
+                       '<div id="divMessage" class="messageArea">' +
+
+                       '</div>' +
+                       '<div class="buttonBar"> <div id="isTyping_' + ctrId + '"></div>' +
+                          '<input id="txtPrivateMessage" class="msgText" type="text"   />' +
+                          '<input id="btnSendMessage" class="submitButton button" type="button" value="Send"   />' +
+                       '</div>' +
+                    '</div>';
+
+            var $div = $(div);
+
+
+            $div.find('#imgDelete').click(function () {
+                $('#' + ctrId).remove();
+            });
+
+            // Send Button event
+            $div.find("#btnSendMessage").click(function () {
+
+                $textBox = $div.find("#txtPrivateMessage");
+
+                var msg = $textBox.val();
+
+                if (msg.length > 0) {
+
+                    chatHub.server.sendPrivateMessage(userId, msg);
+
+                    $textBox.val('');
+
+                    // clear text once user sends message
+                    typingTextPrivate[userId] = '';
+                }
+            });
+
+            // Text Box event
+            $div.find("#txtPrivateMessage").keyup(function (e) {
+
+                if (e.which == 13) {
+
+                    // clear text once user sends message
+                    typingTextPrivate[userId] = '';
+                    $div.find("#btnSendMessage").click();
+
+                }
+                else {
+
+                    // If this user is chatting first time in private array value is undefined, so assign '' to it
+                    if (typingTextPrivate[userId] == undefined)
+                        typingTextPrivate[userId] = '';
+
+                    // Delete last character if it is backspace
+                    if (e.keyCode == 8)
+                        typingTextPrivate[userId] = typingTextPrivate[userId].substring(0, typingTextPrivate[userId].length - 1);
+                    else
+                        typingTextPrivate[userId] += String.fromCharCode(e.which);
+
+
+                    var encodedName = $('<div />').text($('#hdUserName').val()).html();
+
+                    chatHub.server.isTypingPrivate(encodedName, typingTextPrivate[userId]);
+                }
+            });
+
+            AddDivToContainer($div);
+
+        }
+
+
+        function AddDivToContainer($div) {
+
+            $('#divContainer').prepend($div);
+
+            $div.draggable({
+
+                handle: ".header",
+                stop: function () {
+
+                }
+            });
+
+        }
+
+
+
+    </script>
+
+</head>
+<body>
+
+    @if (ViewBag.onlineUser < 20)
+    {
+
+        <div id="header">
+
+            <a href="http://www.varianceinfotech.com/"><img style="width: auto; margin-top: 5px;"  src="~/Css/logo.png" /></a>
+
+        </div>
+
+        <div id="divContainer">
+            <div>
+                <br /><br />
+                <div id="divLogin" class="login">
+
+                    <div>
+                        Your Name:<br />
+                        <input id="txtusername" type="text" class="textBox" />
+                    </div>
+                    <br />
+                    <div id="divButton">
+                        <input id="btnStartChat" type="button" class="submitButton" value="Start Chat" />
+                    </div>
+                </div>
+            </div>
+            <div id="divChat" class="chatRoom">
+                <div class="title">
+                    Welcome to Chat Room [<span id='spanUser'></span>] <a href="javascript:;" id="lnklogout">Logout</a>
+
+                </div>
+                <div class="content">
+                    <div id="divChatWindow" class="chatWindow">
+                    </div>
+                    <div id="divusers" class="users">
+                        <div class="loginUser"></div>
+                    </div>
+                </div>
+                <div class="messageBar">
+                    <div id="isTyping"></div>
+                    <input class="textbox" type="text" id="txtMessage" />
+                    <input id="btnSendMsg" type="button" value="Send" class="submitButton" />
+                </div>
+            </div>
+
+            <input id="hdId" type="hidden" />
+            <input id="hdUserName" type="hidden" />
+        </div>
+
+    }
+    else
+    {
+        <h1>Sorry Friend chat room limit is over try after sometime </h1>
+    }
+
+</body>
+</html>
