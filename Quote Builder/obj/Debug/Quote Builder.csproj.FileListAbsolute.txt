@@ -1,0 +1,12 @@
+E:\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\bin\Quote Builder.dll
+E:\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\bin\Quote Builder.pdb
+E:\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\obj\Debug\Quote Builder.csprojResolveAssemblyReference.cache
+E:\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\obj\Debug\Quote Builder.dll
+E:\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\obj\Debug\Quote Builder.pdb
+\\192.168.137.121\e$\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\bin\Quote Builder.dll.config
+\\192.168.137.121\e$\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\bin\Quote Builder.dll
+\\192.168.137.121\e$\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\bin\Quote Builder.pdb
+\\192.168.137.121\e$\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\obj\Debug\Quote Builder.csprojResolveAssemblyReference.cache
+\\192.168.137.121\e$\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\obj\Debug\Quote Builder.dll
+\\192.168.137.121\e$\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\obj\Debug\Quote Builder.pdb
+E:\Project\Quote Builder\Source Code\Quote Builder\Quote Builder\bin\Quote Builder.dll.config

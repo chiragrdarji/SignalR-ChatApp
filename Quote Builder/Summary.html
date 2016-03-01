@@ -1,0 +1,298 @@
+﻿<div class="row">
+    <div class="col-lg-12 main-sub-container margin-lft-sm">
+        <div class="col-lg-12">
+            <div class="row">
+                <table class="table-Progress-Bar" cellpadding="0" cellspacing="0">
+                    <tr id="table-Progress-Bar-td">
+                        <td class="td-completed">1) Sign Up</td>
+                        <td class="td-completed">2) Modules</td>
+                        <td class="td-completed">3) Add-Ons</td>
+                        <td class="td-active">4) Summary</td>
+                        <td class="td-pending">5) Confirm</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="row" style="margin-top:10px;">
+                <div class="field-holder clearfix font-family-raleway">
+                    <button id="btnContinue" type="button" ng-click="back()" class="btn btn-font-weight btn-primary-back primary-button-size btn-responsive" style="padding: 10px "><img src="../images/btn-back.png" /> &nbsp;BACK&nbsp;&nbsp;</button>
+                    <button id="btnContinue" type="button" ng-click="add()" class="btn btn-font-weight btn-primary btn-primary-color primary-button-size btn-responsive" style="padding: 10px "><img src="../images/arrow2.jpg" /> &nbsp;CONTINUE&nbsp;&nbsp;</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <h3 class="text-uppercase font-family-raleway" style="font-weight:bold;">{{summaryType}}</h3>
+            </div>
+
+            <div class="row">
+                <table class="table table-striped custom-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-6">
+                                On-Going Fees
+                            </th>
+                            <th class="text-center col-md-2">
+                                Cost
+                            </th>
+                            <th class="text-center col-md-2">
+                                Users
+                            </th>
+                            <th class="text-center col-md-2">
+                                Total
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr ng-repeat="obj in OnGoingFeesObjects">
+                            <td>{{obj.name}}</td>
+                            <td class="text-center">${{obj.cost }}</td>
+                            <td class="text-center">{{obj.users}}</td>
+                            <td class="text-right">${{obj.total}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr ng-switch="CustomerData.isquote" class="t-border-none">
+                            <td></td>
+                            <td></td>
+                            <td ng-switch-when="true"><strong>Total Monthly Fees</strong></td>
+                            <td ng-switch-when="true" class="text-right">${{TotalBillingCycleFees}} </td>
+
+                            <td ng-switch-when="false"><strong>Total {{billingcyclename}} Fees</strong> </td>
+                            <td ng-switch-when="false" class="text-right">${{TotalBillingCycleFees}}</td>
+                        </tr>
+                        <tr ng-switch="CustomerData.isquote" class="t-border-none">
+                            <td></td>
+                            <td></td>
+                            <td ng-switch-when="true"><strong>Total Annual Fees</strong></td>
+                            <td ng-switch-when="true" class="text-right ">${{AnnualTotal}}</td>
+
+                        </tr>
+
+                    </tfoot>
+                </table>
+                <table class="table table-striped custom-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-6">One-Time Fees</th>
+                            <th class="text-center col-md-2">Cost</th>
+                            <th class="text-center col-md-2">Users</th>
+                            <th class="text-center col-md-2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="obj1 in OneTimeFeesObjects">
+                            <td>{{obj1.name}}</td>
+                            <td class="text-center">${{obj1.cost}}</td>
+                            <td class="text-center">{{obj1.users}}</td>
+                            <td class="text-right">${{obj1.total}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><strong>Total One-Time Fees</strong><br /></td>
+                            <td class="text-right">${{OneTimeTotal}} <br /></td>
+                        </tr>
+
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 main-sub-container margin-lft-sm msgSiteSetUp" ng-switch="CustomerData.isquote">
+        <span ng-switch-when="true">Site Set-Up Fee is waived with online purchase</span>
+    </div>
+    
+    <div style="display:none; visibility:hidden;">
+        <div id="idmailcontent" class="row" style="font-family: raleway,sans-serif !important;">
+
+            {{CustomerData.firstname}}&nbsp;{{CustomerData.lastname}},<br /><br />
+
+            <div class="content" ng-switch on="CustomerData.isquote">
+                <div ng-switch-when="false">
+                    <p>
+                        Thank you for purchasing IndustrySafe Safety Software on {{ESTTime}} Eastern Time. We have included a summary and detailed description of your purchase below. This email serves as your order confirmation. You will receive an email with login instructions to IndustrySafe within one business day and an IndustrySafe implementation specialist will contact you to assist you with your site set-up.
+                    </p>
+                    <p>
+                        An invoice for your order will also be emailed to you within one to three business days. If you have any questions about your IndustrySafe order, please contact us directly <a href="mailto:sales@industrysafe.com">sales@industrysafe.com</a> or via telephone at 1.800.696.9110.
+                    </p>
+                </div>
+                <div ng-switch-when="true">
+                    <p>
+                        Thank you for completing a quote for IndustrySafe Safety Software on {{ESTTime}} Eastern Time.
+                        We have included a summary and detailed description of your quote below. Your quote will remain active for 15 days.
+                        You may purchase the IndustrySafe software <a href="{{mainurl}}/#/accountsignup">here</a>. Please contact us at <a href="mailto:sales@industrysafe.com">sales@industrysafe.com</a> or
+                        via telephone at 1.800.696.9110 if we can be of any more assistance.
+                    </p>
+
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="content" ng-switch on="CustomerData.isquote">
+                <div ng-switch-when="false">
+                    <strong>Order Summary</strong>
+                </div>
+                <div ng-switch-when="true">
+                    <strong>Quote Summary</strong>
+                </div>
+            </div>
+
+            <p>
+                {{CustomerData.firstname}}&nbsp;{{CustomerData.lastname}}<br />
+                {{CustomerData.title}}<br />
+                {{CustomerData.company}}<br />
+                {{CustomerData.phone}}<br />
+                {{CustomerData.email}}<br />
+            </p>
+
+            <p>
+                Number of Users:&nbsp;{{CustomerData.numberofusers}}
+            </p>
+
+            <table cellpadding="0" cellspacing="0" border="1" style="width:100%">
+                <thead>
+                    <tr ng-switch="CustomerData.isquote">
+                        <th class="text-center col-md-6">
+                            On-Going Fees
+                        </th>
+                        <th ng-switch-when="true" class="text-center col-md-2">
+                            Annual Unit Cost
+                        </th>
+                        <th ng-switch-when="true" class="text-center col-md-2">
+                            Annual Cost
+                        </th>
+
+                        <th ng-switch-when="false" class="text-center col-md-2">
+                            {{billingcyclename}} Unit Cost
+                        </th>
+                        <th ng-switch-when="false" class="text-center col-md-2">
+                            {{billingcyclename}} Cost
+                        </th>
+                    </tr>
+                </thead>
+                <tbody ng-switch="CustomerData.isquote">
+                    <tr ng-repeat="obj in OnGoingFeesObjects">
+                        <td>{{obj.name}}</td>
+                        <td ng-switch-when="true" class="text-center">${{obj.cost * 12}}</td>
+                        <td ng-switch-when="true" class="text-right">${{obj.total * 12}}</td>
+
+                        <td ng-switch-when="false" class="text-center">${{obj.cost }}</td>
+                        <td ng-switch-when="false" class="text-right">${{obj.total  }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr ng-switch="CustomerData.isquote">
+                        <td ng-switch-when="true"><strong>Total Annual Fees</strong></td>
+                        <td ng-switch-when="false"><strong>Total {{billingcyclename}} Fees</strong></td>
+                        <td></td>
+                        <td ng-switch-when="true" class="text-right">${{MonthlyTotal * 12 }}</td>
+                        <td ng-switch-when="false" class="text-right">${{TotalBillingCycleFees}}</td>
+                    </tr>
+
+                </tfoot>
+            </table>
+            <br />
+            <table cellpadding="0" cellspacing="0" border="1" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="text-center col-md-6">One-Time Fees</th>
+                        <th class="text-center col-md-2">One-Time Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="obj1 in OneTimeFeesObjects">
+                        <td>{{obj1.name}}</td>
+                        <td class="text-right">${{obj1.total}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Total One-Time Fees</strong><br /></td>
+                        <td class="text-right">${{OneTimeTotal}} <br /></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <br />
+            <div ng-switch="CustomerData.isquote">
+                <span ng-switch-when="true"><i style="color:black;"> Site Set-Up Fee is waived with online purchase</i></span>
+            </div>
+
+
+            <div class="content" ng-switch on="CustomerData.isquote">
+                <div ng-switch-when="false">
+                    <strong>Order Detail</strong>
+                </div>
+                <div ng-switch-when="true">
+                    <strong>Quote Detail</strong>
+                </div>
+            </div>
+
+            <p>
+                TRA will provide access to TRA’s proprietary software IndustrySafe, including a browser interface and data encryption, transmission, access and storage. IndustrySafe is safety management software designed to manage safety activity, including the modules listed below:
+            </p>
+
+            <p>
+                <strong>Home.</strong> With the Home Module, users can schedule and view all of their related safety activities, including tasks, events, inspections, corrective actions and training. The Home Module serves as a compliance calendar alerting users to upcoming and overdue safety items.
+
+            </p>
+
+            <p>
+                <strong>Corrective Actions.</strong>The Corrective Actions Module enables organizations to generate plans for incidents, hazards, safety inspections, security activities and observations. Tracking the assignment and status of problem reports enables timely completion of corrective action plans and improved safety. Automatic e-mail alerts notify key responsible parties of open, overdue and closed corrective actions.
+            </p>
+
+            <p>
+                <strong>Hazards.</strong>  The Hazards Module enables organizations to identify, analyze and remediate hazardous conditions. Risk assessments based on probability and severity can be conducted for each hazard identified within the organization. Automatic e-mail alerts notify users of hazards.
+            </p>
+
+            <p ng-repeat="obj in mailBodyContentObject">
+                <strong>{{obj.name}}.</strong>{{obj.desc}}
+            </p>
+
+            <p>
+                <strong>Site Set Up.</strong> For each organization, we set up a unique subscription site. This site is only accessible to individuals in your organization and we provide a separate schema for each client site. We configure the site to match the modules and number and type of users purchased by your organization. Once your site is set-up we work with you to assist you in system configuration.
+            </p>
+
+            <p>
+                <strong>Standard Configuration Assistance.</strong> We provide {{StandardConfigurationHours}} hours of technical assistance and set-up via web conference. Our configuration expert assists clients with initial set-up and configuration settings including detailed analysis and advice. All standard configuration includes hierarchy (location) assistance and module specific assistance depending on modules purchased.
+            </p>
+
+            <p ng-repeat="obj in mailBodyContentannualObject">
+                <strong>{{obj.name}}.</strong>{{obj.desc}}
+            </p>
+            <p>
+                <strong> Hosting, Maintenance and Support</strong><br />
+                TRA standard support includes telephone, e-mail, and web meeting support Monday through Friday 9:00 AM –5:00 PM (ET).
+            </p>
+            <p>
+                With TRA’s service request software, Customers can enter in and update service requests on-line 24 hours a day, seven days a week. Customer can receive e-mail notifications as TRA responds and updates service requests and TRA responds to all service requests within one business day. TRA’s service request software allows clients to generate reports viewing the status of all their service requests.
+            </p>
+
+            <p>
+                TRA also has an on-line knowledge base, including videos, training materials and user guides, which is available to customers.
+            </p>
+
+            <p>
+                As part of its hosting fee, TRA will update the IndustrySafe software two or three times a year. These updates include new feature /functionality and minor bug fixes. Updates are based upon feedback from clients and potential clients.
+            </p>
+
+            <p>
+                TRA will also update and maintain the appropriate 3rd party software used in the IndustrySafe application. TRA will monitor, test, and provide the appropriate back-ups of the IndustrySafe Software.
+                Copyright © 2015 Transportation Resource Associates, All rights reserved.
+            </p>
+
+            <p>
+                Our mailing address is:<br />
+                IndustrySafe, a Product of TRA, Inc.<br />
+                1608 Walnut Street, Suite 1602<br />
+                Philadelphia, PA 19103<br />
+            </p>
+        </div>
+    </div>
+
+
+</div>

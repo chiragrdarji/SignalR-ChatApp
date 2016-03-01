@@ -1,0 +1,168 @@
+﻿
+<div class="row main-container">
+    <div class="col-lg-4">
+        <div class="row">
+            <div class="main-container-left-side-title">
+                <h2 class="font-family-raleway"><strong>QUOTE</strong></h2>
+                <p style="font-size:15pt; ">Please use our quote builder for a detailed IndustrySafe price quote.</p>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-4 main-sub-container">
+        <form action=" #" method="post" id="signupform" class="signupform">
+            <div class="col-lg-12">
+
+
+                <div class="row">
+                    <label for="txtfirstname" class="must-fill">First Name</label>
+                    <label id="txtfirstname_err" class="hidden validation-error">Required</label>
+                    <div class="field-holder clearfix" id="txtfirstname-error">
+                        <input type="text" id="txtfirstname" class="form-control" ng-model="CustomerData.firstname" name="txtfirstname" maxlength="40" placeholder="Required" />
+                        <span class="lable-ico  icon-user">
+                            <span class="border-right"></span>
+                        </span>
+                        <span class="validation-ico"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="txtlastname" class="must-fill">Last Name</label>
+                    <label id="txtlastname_err" class="hidden validation-error">Required</label>
+                    <div class="field-holder clearfix" id="txtlastname-error">
+                        <input type="text" id="txtlastname" class="form-control" ng-model="CustomerData.lastname" name="txtlastname" maxlength="40" placeholder="Required" />
+                        <span class="lable-ico  icon-user">
+                            <span class="border-right"></span>
+                        </span>
+                        <span class="validation-ico"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="txttitle" class="must-fill">Title</label>
+                    <label id="txttitle_err" class="hidden validation-error">Required</label>
+                    <div class="field-holder clearfix" id="txttitle-error">
+                        <input type="text" id="txttitle" class="form-control" ng-model="CustomerData.title" name="txttitle" maxlength="40" placeholder="Ex: Manager" />
+                        <span class="lable-ico  icon-doc-text">
+                            <span class="border-right"></span>
+                        </span>
+                        <span class="validation-ico"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="txtcompany" class="must-fill">Company</label>
+                    <label id="txtcompany_err" class="hidden validation-error">Required</label>
+                    <div class="field-holder clearfix" id="txtcompany-error">
+                        <input type="text" id="txtcompany" class="form-control" ng-model="CustomerData.company" name="txtcompany" maxlength="40" placeholder="Ex: My Company, Inc" />
+                        <span class="lable-ico  icon-tower">
+                            <span class="border-right"></span>
+                        </span>
+                        <span class="validation-ico"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="txtemail" class="must-fill">E-mail</label>
+                    <label id="txtemail_err" class="hidden validation-error">Valid Email Required</label>
+                    <div class="field-holder clearfix" id="txtemail-error">
+                        <input type="text" id="txtemail" class="form-control" ng-model="CustomerData.email" name="txtemail" maxlength="255" placeholder="name@example.com" />
+                        <span class="lable-ico  icon-mail">
+                            <span class="border-right"></span>
+                        </span>
+                        <span class="validation-ico"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="txtphone" class="must-fill">Phone</label>
+                    <label id="txtphone_err" class="hidden validation-error">Required</label>
+                    <div class="field-holder clearfix" id="txtphone-error">
+                        <input type="text" id="txtphone" class="form-control" ng-model="CustomerData.phone" name="txtphone" maxlength="20" placeholder="8006969110" />
+                        <span class="lable-ico  icon-phone">
+                            <span class="border-right"></span>
+                        </span>
+                        <span class="validation-ico"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="ddlNumberofUsers" class="must-fill">Number of Users</label>
+                    <label id="ddlNumberofUsers_err" class="hidden validation-error">Required</label>
+                    <div class="field-holder clearfix" id="ddlNumberofUsers-error">
+                        <select class="form-control" ng-model="CustomerData.numberofusers" id="ddlNumberofUsers" name="ddlNumberofUsers">
+                            <option value="" selected>Select Users</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="10 Plus">10 Plus</option>
+                        </select>
+                        <span class="lable-ico  icon-doc-text">
+                            <span class="border-right"></span>
+                        </span>
+                        <span class="validation-ico"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="field-holder clearfix">
+                        <button id="btnContinue" type="button" ng-click="add()" class="btn btn-primary btn-primary-color primary-button-size" style="padding: 10px !important; "><img src="../images/arrow2.jpg" /> &nbsp;CONTINUE &nbsp;&nbsp;</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <div class="display-none">
+        <form action="https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST" id="quoteform" name="quoteform">
+            <div class="display-none">
+                <input type=hidden name="oid" value="00D300000000P1u">
+                <input type=hidden name="retURL" value="{{mainurl}}/#/Modules">
+                
+
+                <input id="first_name" maxlength="40" value="{{CustomerData.firstname}}" name="first_name" size="20" type=hidden /><br>
+
+                <input id="last_name" maxlength="80" value="{{CustomerData.lastname}}" name="last_name" size="20" type=hidden /><br>
+
+                <input id="title" maxlength="40" name="title" value="{{CustomerData.title}}" size="20" type=hidden /><br>
+
+                <input id="email" maxlength="80" name="email" value="{{CustomerData.email}}" size="20" type=hidden /><br>
+
+                <input id="company" maxlength="40" value="{{CustomerData.company}}" name="company" size="20" type=hidden /><br>
+
+                <input id="phone" maxlength="40" value="{{CustomerData.phone}}" name="phone" size="20" type=hidden /><br>
+
+                <select id="00N40000001QMjY" hidden ng-model="CustomerData.numberofusers" name="00N40000001QMjY" title="Number of Users">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select><br>
+
+                <input id="lead_source" name="lead_source" value="quote" type=hidden /><br>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!--Helper-->
+
+<script src="App_Scripts/Helper/Quote.js"></script>
+
+

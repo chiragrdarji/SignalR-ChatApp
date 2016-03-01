@@ -1,0 +1,120 @@
+﻿
+<div class="row main-container">
+    <div class="col-lg-4">
+        <div class="row">
+            <div class="main-container-left-side-title">
+                <h2 class="font-family-raleway"><strong>SELECT YOUR ADD-ONS</strong></h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7 main-sub-container">
+        <div class="col-lg-12">
+            <div class="row">
+                <table class="table-Progress-Bar" cellpadding="0" cellspacing="0">
+                    <tr id="table-Progress-Bar-td">
+                        <td class="td-completed">1) Sign Up</td>
+                        <td class="td-completed">2) Modules</td>
+                        <td class="td-active">3) Add-Ons</td>
+                        <td class="td-pending">4) Summary</td>
+                        <td class="td-pending">5) Confirm</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="row">
+                <h2><strong>SELECT YOUR ADD-ONS</strong></h2>
+            </div>
+            <div class="row">
+
+                <div ng-repeat="obj in AddonsData" on-last-repeat>
+                    <div ng-switch="obj.ischildElement">
+                        <div class="checkbox" ng-switch-when="false">
+                            <label data-toggle="tooltip" class="red-tooltip" title="{{obj.description}}" data-placement="{{datatoggel}}">
+                                <input type="checkbox"
+                                       name=""
+                                       value="{{obj.id}}"
+                                       ng-model="obj.isChecked" /> {{obj.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-repeat="obj in AddonsData" on-last-repeat>
+
+                    <div ng-switch="obj.ischildElement">
+                        <div class="checkbox" ng-switch-when="true">
+                            <div ng-if="obj.name ==='Select Additional Training Services'">
+                                <hr style="height: 1px; border: none; color: #8f9392; background-color: #8f9392;" />
+                                <label style="font-size: 19px; margin-bottom: 5px;padding-left:1px;"><strong> Training Services</strong></label>
+                                <br />
+                                <label style="margin-bottom: 5px; padding-left: 1px;">IndustrySafe's standard package includes software configuration assistance via the web.</label>
+                                <br />
+
+                            </div>
+                            <div ng-click="popup($index)" >
+                                <span class="glyphicon glyphicon-plus custome-icon"></span>
+                                <label data-toggle="tooltip" class="red-tooltip pd-left-0" title=" {{obj.description}}" data-placement="{{datatoggel}}">{{obj.name}}</label> 
+                                <br />
+                                <div style="margin-left:20px;" class="spn-grn">
+                                    <span ng-repeat="childobj in obj.childElements" ng-switch="childobj.isChecked">
+                                        <span ng-switch-when="true">
+                                            {{childobj.name}},&nbsp;
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--model popup-->
+
+            </div>
+
+
+
+            <div class="row">
+                <div class="field-holder clearfix font-family-raleway">
+                    <button id="btnContinue" type="button" ng-click="back()" class="btn btn-primary-back btn-font-weight primary-button-size btn-responsive" style="padding: 10px  "><img src="../images/btn-back.png" />&nbsp;BACK&nbsp;&nbsp;</button>
+                    <button id="btnContinue" type="button" ng-click="add()" class="btn btn-primary btn-font-weight btn-primary-color primary-button-size btn-responsive" style="padding: 10px "><img src="../images/arrow2.jpg" /> &nbsp;CONTINUE&nbsp;&nbsp;</button>
+                </div>
+            </div>
+            <div class="row">
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div style="z-index:10000;" id="myModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog {{modelZise}}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 data-placement="{{datatoggel}}" data-toggle="tooltip" class="modal-title red-tooltip" data-original-title="{{description}}">{{title}}</h4>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10 padding-lft-sm">
+                    <span>{{subTitle}}</span>
+                    <div ng-repeat="obj in childElementObj" on-last-repeat>
+
+                        <div class="checkbox ">
+                            <label data-toggle="tooltip" class="red-tooltip lbl-Org" title="{{obj.description}}" data-placement="{{datatoggel}}">
+                                <input type="checkbox"
+                                       name=""
+                                       value="{{obj.id}}"
+                                       ng-model="obj.isChecked" /> {{obj.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="addAddOns()" class="btn btn-success">{{buttontype}}</button>
+            </div>
+        </div>
+    </div>
+</div>

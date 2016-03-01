@@ -1,0 +1,51 @@
+﻿<div class="row main-container">
+
+    <div class="col-lg-4">
+        <div class="row">
+            <div class="main-container-left-side-title">
+                <h2 class="font-family-raleway"><strong>SELECT YOUR MODULES</strong></h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7 main-sub-container">
+        <div class="col-lg-12">
+            <div class="row">
+                <table class="table-Progress-Bar" cellpadding="0" cellspacing="0">
+                    <tr id="table-Progress-Bar-td">
+                        <td class="td-completed">1) Sign Up</td>
+                        <td class="td-active">2) Modules</td>
+                        <td class="td-pending">3) Add-Ons</td>
+                        <td class="td-pending">4) Summary</td>
+                        <td class="td-pending">5) Confirm</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="row">
+                <h2><strong>SELECT YOUR MODULES</strong></h2>
+            </div>
+            <div class="row">
+
+                <div class="checkbox" ng-repeat="obj in ModulesData" on-last-repeat>
+                    <label data-toggle="tooltip" class="red-tooltip" title="{{obj.description}}" data-placement="{{datatoggel}}">
+                        <input type="checkbox"
+                               name="selectedModulesData[]"
+                               value="{{obj.id}}"
+                               ng-model="obj.isChecked" /> {{obj.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="field-holder clearfix font-family-raleway">
+                    <button id="btnContinue" type="button" ng-click="back()" class="btn btn-primary-back btn-font-weight primary-button-size btn-responsive" style="padding: 10px "><img src="../images/btn-back.png" /> &nbsp;BACK&nbsp;&nbsp;</button>
+                    <button id="btnContinue" type="button" ng-click="add()" class="btn btn-primary btn-font-weight btn-primary-color primary-button-size btn-responsive" style="padding: 10px "><img src="../images/arrow2.jpg" /> &nbsp;CONTINUE&nbsp;&nbsp;</button>
+                </div>
+            </div>
+            <div class="row">
+                <br />
+            </div>
+        </div>
+    </div>
+
+</div>
+

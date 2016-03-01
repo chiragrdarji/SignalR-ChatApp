@@ -1,0 +1,8 @@
+body{ min-width:1054px;}
+.modules-block .text-holder .features li{
+	padding:0 10px 10px 30px;
+}
+.signupform button{ width:290px;}
+.overview-incidents .text-holder .btn.btn-info{
+	padding:14px 40px 11px 77px;
+}
